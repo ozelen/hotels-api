@@ -1,0 +1,164 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Skiworld API
+host: localhost:10010
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+  - text/plain
+paths:
+  /hotels:
+    get:
+      x-swagger-router-controller: hotelsController
+      operationId: getHotels
+      summary: List of hotels
+      description: Returns list of hotels filtered by query
+      parameters:
+        - name: search
+          in: query
+          description: Search query
+          required: false
+          type: string
+      tags:
+        - hotels
+      responses:
+        "200":
+          description: Array of Hotels
+          schema:
+            type: array
+            items:
+             $ref: "#/definitions/Hotel"
+
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      x-swagger-router-controller: hotelsController
+      operationId: createHotel
+      summary: Create new Hotel
+      description: Creates new Hotel
+      tags:
+        - hotel
+      consumes:
+        - application/json
+      produces:
+        - text/plain
+      parameters:
+        - in: body
+          name: body
+          description: Topic data-object
+          required: false
+          schema:
+            $ref: "#/definitions/Hotel"
+      responses:
+        "405":
+          description: Invalid input
+        "200":
+          description: Success
+
+  /hotels/{hotelId}:
+    get:
+      x-swagger-router-controller: hotelsController
+      tags:
+        - hotel
+      summary: Finds hotel by ID
+      description: Returns a hotel by ID
+      operationId: getHotelById
+      produces:
+        - application/json
+      parameters:
+        - name: hotelId
+          in: path
+          description: ID of a hotel that needs to be fetched
+          required: true
+          type: string
+      responses:
+        "404":
+          description: Hotel not found
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Hotel"
+        "400":
+          description: Invalid ID supplied
+          
+    put:
+      x-swagger-router-controller: hotelsController
+      operationId: updateHotel
+      tags:
+        - hotel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: hotelId
+          in: path
+          description: ID of a hotel that needs to be updateds
+          required: true
+          type: string
+          
+        - name: body
+          in: body
+          description: Topic data-object
+          required: true
+          schema:
+            $ref: "#/definitions/Hotel"
+      responses:
+        "405":
+          description: Invalid input
+        default:
+          description: OK
+          
+    delete:
+      x-swagger-router-controller: hotelsController
+      operationId: deleteHotel
+      tags:
+        - hotel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: hotelId
+          in: path
+          description: ID of a hotel to delete
+          required: true
+          type: string
+
+      responses:
+        "405":
+          description: Invalid input
+        default:
+          description: OK
+
+# complex objects have schema definitions
+definitions:
+  Hotel:
+    type: object
+    properties:
+      _id:
+        type: string
+      type:
+        type: string
+      city:
+        type: string
+      name:
+        type: string
+
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
