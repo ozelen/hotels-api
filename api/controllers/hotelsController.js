@@ -4,8 +4,6 @@ const {extend} = require('lodash');
 const sendError = (res, status, message) =>
   detail => res.status(status).end(); //.json({status, message, detail});
 
-const sendOk = res => resp => res.status(200).end();
-
 const sendJson = res => data => res.json(data);
 
 const getHotels = (req, res) =>
@@ -15,14 +13,14 @@ const getHotels = (req, res) =>
 
 const createHotel = (req, res) =>
   Hotel.create(req.body).
-    then(sendOk(res)).
+    then(sendJson(res)).
     catch(sendError(res, 500, 'Cannot create a Hotel'));
 
 const updateHotel = (req, res) =>
   Hotel.findById(req.swagger.params.hotelId.value).
     then(hotel => extend(hotel, req.body)).
     then(hotel => hotel.save()).
-    then(sendOk(res)).
+    then(sendJson(res)).
     catch(sendError(res, 500, 'Cannot update the Hotel'));;
 
 const getHotelById = (req, res) =>
@@ -38,9 +36,8 @@ const deleteHotel = (req, res) =>
 
 const removeHotel = (req, res) =>
   Hotel.remove({_id: req.swagger.params.hotelId.value}).
-    then(sendOk(res)).
+    then(sendJson(res)).
     catch(sendError(res, 500, 'Cannot delete the hotel'))
-
 
 module.exports = {
   getHotels,

@@ -51,7 +51,7 @@ paths:
       consumes:
         - application/json
       produces:
-        - text/plain
+        - application/json
       parameters:
         - in: body
           name: body
@@ -64,6 +64,8 @@ paths:
           description: Invalid input
         "200":
           description: Success
+          schema:
+            $ref: "#/definitions/Hotel"
 
   /hotels/{hotelId}:
     get:
@@ -117,6 +119,10 @@ paths:
       responses:
         "405":
           description: Invalid input
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Hotel"
         default:
           description: OK
           
@@ -139,6 +145,10 @@ paths:
       responses:
         "405":
           description: Invalid input
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Hotel"
         default:
           description: OK
 
@@ -154,6 +164,20 @@ definitions:
       city:
         type: string
       name:
+        type: string
+      rooms:
+        type: array
+        items:
+          $ref: "#/definitions/Room"
+
+  Room:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+      description:
         type: string
 
   ErrorResponse:
