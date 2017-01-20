@@ -53,6 +53,9 @@ paths:
       produces:
         - application/json
       parameters:
+        - in: header
+          name: Authorization
+          type: string
         - in: body
           name: body
           description: Topic data-object
@@ -96,6 +99,7 @@ paths:
     put:
       x-swagger-router-controller: hotelsController
       operationId: updateHotel
+
       tags:
         - hotel
       consumes:
@@ -186,3 +190,12 @@ definitions:
     properties:
       message:
         type: string
+
+# securityDefinitions:
+#   authorization:
+#     type: apiKey
+#     name: Authorization
+#     in: header
+    
+#security:
+#  - authorization: []
